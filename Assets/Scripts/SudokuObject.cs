@@ -24,77 +24,91 @@ public class SudokuObject
 	{
 		value = array;
 	}
-	private void SwapVerticalLine(int indexLine1, int indexLine2)
+	public void SetValue(int x, int y, int val)
 	{
-		if (indexLine1 > 2 || indexLine1 < 0 || indexLine2 > 2 || indexLine2 < 0) return;
+		value[x, y] = val;
+	}
+	private bool SwapVerticalLine(int indexLine1, int indexLine2, int multipleLine)
+	{
+		if (indexLine1 > 2 || indexLine1 < 0 || indexLine2 > 2 || indexLine2 < 0 || multipleLine > 2 || multipleLine < 0 || indexLine1 == indexLine2) return false;
 		for(int j = 0; j < 9; j++)
 		{
-			value[indexLine1, j] = value[indexLine1, j] + value[indexLine2, j];
-			value[indexLine2, j] = value[indexLine1, j] - value[indexLine2, j];
-			value[indexLine1, j] = value[indexLine1, j] - value[indexLine2, j];
+			value[indexLine1 + multipleLine * 3, j] = value[indexLine1 + multipleLine * 3, j] + value[indexLine2 + multipleLine * 3, j];
+			value[indexLine2 + multipleLine * 3, j] = value[indexLine1 + multipleLine * 3, j] - value[indexLine2 + multipleLine * 3, j];
+			value[indexLine1 + multipleLine * 3, j] = value[indexLine1 + multipleLine * 3, j] - value[indexLine2 + multipleLine * 3, j];
 		}
+		return true;
 	}
-	private void SwapVerticalLines(int indexLines1, int indexLines2)
+	private bool SwapVerticalLines(int indexLines1, int indexLines2)
 	{
-		if (indexLines1 > 2 || indexLines1 < 0 || indexLines2 > 2 || indexLines2 < 0) return;
+		if (indexLines1 > 2 || indexLines1 < 0 || indexLines2 > 2 || indexLines2 < 0 || indexLines1 == indexLines2) return false;
 		for (int j = 0; j < 9; j++)
 		{
 			for(int k = 0; k < 3; k++)
 			{
-				value[indexLines1 + k, j] = value[indexLines1 + k, j] + value[indexLines2 + k, j];
-				value[indexLines2 + k, j] = value[indexLines1 + k, j] - value[indexLines2 + k, j];
-				value[indexLines1 + k, j] = value[indexLines1 + k, j] - value[indexLines2 + k, j];
+				value[indexLines1 * 3 + k, j] = value[indexLines1 * 3 + k, j] + value[indexLines2 * 3 + k, j];
+				value[indexLines2 * 3 + k, j] = value[indexLines1 * 3 + k, j] - value[indexLines2 * 3 + k, j];
+				value[indexLines1 * 3 + k, j] = value[indexLines1 * 3 + k, j] - value[indexLines2 * 3 + k, j];
 			}
 		}
+		return true;
 	}
-	private void SwapHorizontalLine(int indexLine1, int indexLine2)
+	private bool SwapHorizontalLine(int indexLine1, int indexLine2, int multipleLine)
 	{
-		if (indexLine1 > 2 || indexLine1 < 0 || indexLine2 > 2 || indexLine2 < 0) return;
+		if (indexLine1 > 2 || indexLine1 < 0 || indexLine2 > 2 || indexLine2 < 0 || multipleLine > 2 || multipleLine < 0 || indexLine1 == indexLine2) return false;
 		for (int i = 0; i < 9; i++)
 		{
-			value[i, indexLine1] = value[i, indexLine1] + value[i, indexLine2];
-			value[i, indexLine2] = value[i, indexLine1] - value[i, indexLine2];
-			value[i, indexLine1] = value[i, indexLine1] - value[i, indexLine2];
+			value[i, indexLine1 + multipleLine * 3] = value[i, indexLine1 + multipleLine * 3] + value[i, indexLine2 + multipleLine * 3];
+			value[i, indexLine2 + multipleLine * 3] = value[i, indexLine1 + multipleLine * 3] - value[i, indexLine2 + multipleLine * 3];
+			value[i, indexLine1 + multipleLine * 3] = value[i, indexLine1 + multipleLine * 3] - value[i, indexLine2 + multipleLine * 3];
 		}
+		return true;
 	}
-	private void SwapHorizontalLines(int indexLines1, int indexLines2)
+	private bool SwapHorizontalLines(int indexLines1, int indexLines2)
 	{
-		if (indexLines1 > 2 || indexLines1 < 0 || indexLines2 > 2 || indexLines2 < 0) return;
+		if (indexLines1 > 2 || indexLines1 < 0 || indexLines2 > 2 || indexLines2 < 0 || indexLines1 == indexLines2) return false;
 		for (int i = 0; i < 9; i++)
 		{
 			for (int k = 0; k < 3; k++)
 			{
-				value[i, indexLines1 + k] = value[i, indexLines1 + k] + value[i, indexLines2 + k];
-				value[i, indexLines2 + k] = value[i, indexLines1 + k] - value[i, indexLines2 + k];
-				value[i, indexLines1 + k] = value[i, indexLines1 + k] - value[i, indexLines2 + k];
+				value[i, indexLines1 * 3 + k] = value[i, indexLines1 * 3 + k] + value[i, indexLines2 * 3 + k];
+				value[i, indexLines2 * 3 + k] = value[i, indexLines1 * 3 + k] - value[i, indexLines2 * 3 + k];
+				value[i, indexLines1 * 3 + k] = value[i, indexLines1 * 3 + k] - value[i, indexLines2 * 3 + k];
 			}
 		}
+		return true;
 	}
 	public void RandomSelf(int cycle = 0)
 	{
-		for (int i = 0; i < cycle; i++)
+		Debug.Log(this.ToString());
+		int ch = -1, old_ch;
+		for (int i = 0; i < cycle;)
 		{
-			int ch = (int)Random.Range(0, 4);
+			old_ch = ch;
+			ch = (int)Random.Range(0, 4);
+			if (ch == old_ch) continue;
 			int l1 = (int)Random.Range(0, 2);
 			int l2 = (int)Random.Range(0, 2);
-			Debug.Log(ch.ToString() + " " + l1.ToString() + " " + l2.ToString());
+			int ex = (int)Random.Range(0, 2);
+			if (l1 == l2) continue;
+			Debug.Log(i.ToString() + " " + ch.ToString() + " " + l1.ToString() + " " + l2.ToString());
 			switch (ch)
 			{
 				case 0:
-					SwapVerticalLine(l1, l2);
+					if(SwapVerticalLine(l1, l2, ex)) i++;
 					break;
 				case 1:
-					SwapVerticalLines(l1, l2);
+					if(SwapVerticalLines(l1, l2)) i++;
 					break;
 				case 2:
-					SwapHorizontalLine(l1, l2);
+					if(SwapHorizontalLine(l1, l2, ex)) i++;
 					break;
 				case 3:
-					SwapHorizontalLines(l1, l2);
+					if(SwapHorizontalLines(l1, l2)) i++;
 					break;
 			}
+			Debug.Log(this.ToString());
 		}
-
 	}
 	public static bool operator ==(SudokuObject a, SudokuObject b)
 	{
@@ -114,13 +128,15 @@ public class SudokuObject
 	public override string ToString()
 	{
 		string ret = "";
-		for(int i = 0; i < 9; i++)
+		for(int j = 0; j < 9; j++)
 		{
-			for(int j = 0; j < 9; j++)
+			for(int i = 0; i < 9; i++)
 			{
 				ret = ret + value[i, j] + " ";
+				if ((i + 1) % 3 == 0) ret = ret + "| ";
 			}
 			ret = ret + "\n";
+			if ((j + 1) % 3 == 0) ret = ret + "-----+-----+-----\n";
 		}
 		return ret;
 	}

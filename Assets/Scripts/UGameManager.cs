@@ -15,6 +15,7 @@ public class UGameManager : MonoBehaviour
 	{
 		Debug.Log("Start");
 		solveTable = new SudokuObject();
+		solveTable.RandomSelf(32);
 		InitializeTable(solveTable);
 	}
 
@@ -25,7 +26,7 @@ public class UGameManager : MonoBehaviour
 		{
 			for(int i = 0; i < 9; i++)
 			{
-				Debug.Log("Cell [" + i.ToString() + j.ToString() + "]" + ") -> " + (cellTable[i, j] != null ? "Ok" : "No"));
+				//Debug.Log("Cell [" + i.ToString() + j.ToString() + "]" + ") -> " + (cellTable[i, j] != null ? "Ok" : "No"));
 				cellTable[i, j] = GameObject.Find("Cell [" + i.ToString() + j.ToString() + "]").GetComponent<Cell>();
 				cellTable[i, j].SetPosition(i, j);
 				cellTable[i, j].SetValue(sudObj.value[i, j]);
