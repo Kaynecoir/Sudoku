@@ -8,23 +8,18 @@ public class UGameManager : MonoBehaviour
 	public GameObject goTable;
 	public Sprite[] numbersSprite = new Sprite[10];
 
-	private int[,] table =
-	{
-		{1, 4, 7, 9, 3, 6, 8, 2, 5 },
-		{2, 5, 8, 1, 4, 7, 9, 3, 6 },
-		{3, 6, 9, 2, 5, 8, 1, 4, 7 },
-		{4, 7, 1, 3, 6, 9, 2, 5, 8 },
-		{5, 8, 2, 4, 7, 1, 3, 6, 9 },
-		{6, 9, 3, 5, 8, 2, 4, 7, 1 },
-		{7, 1, 4, 6, 9, 3, 5, 8, 2 },
-		{8, 2, 5, 7, 1, 4, 6, 9, 3 },
-		{9, 3, 6, 8, 2, 5, 7, 1, 4 }
-	};
+	private SudokuObject solveTable, notSolveTable;
 	private Cell[,] cellTable;
 
 	private void Start()
 	{
 		Debug.Log("Start");
+		solveTable = new SudokuObject();
+		InitializeTable(solveTable);
+	}
+
+	public void InitializeTable(SudokuObject sudObj)
+	{
 		cellTable = new Cell[9, 9];
 		for(int j = 0; j < 9; j++)
 		{
@@ -33,11 +28,10 @@ public class UGameManager : MonoBehaviour
 				Debug.Log("Cell [" + i.ToString() + j.ToString() + "]" + ") -> " + (cellTable[i, j] != null ? "Ok" : "No"));
 				cellTable[i, j] = GameObject.Find("Cell [" + i.ToString() + j.ToString() + "]").GetComponent<Cell>();
 				cellTable[i, j].SetPosition(i, j);
-				cellTable[i, j].SetValue(table[i, j]);
-				cellTable[i, j].SetImage(numbersSprite[table[i, j]]);
+				cellTable[i, j].SetValue(sudObj.value[i, j]);
+				cellTable[i, j].SetImage(numbersSprite[sudObj.value[i, j]]);
 			}
 		}
-		
 	}
 
 	public void ChangeCurrentCell(Cell c)
