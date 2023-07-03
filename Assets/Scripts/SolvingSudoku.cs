@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SolvingSudoku
 {
-	public SudokuObject result;
-	public SolvingSudoku(SudokuObject sudObj)
+	public List<SudokuObject> results = new List<SudokuObject>();
+	public SolvingSudoku()
 	{
 
 	}
@@ -38,7 +38,7 @@ public class SolvingSudoku
 		}
 		Debug.Log("!!! FINAL !!!");
 		Debug.Log(thisSudObj);
-		result = thisSudObj;
+		results.Add(thisSudObj);
 		return sudObj;
 	}
 	public bool CheckFull(int x, int y, SudokuObject sudObj)

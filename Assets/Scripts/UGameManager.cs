@@ -15,8 +15,12 @@ public class UGameManager : MonoBehaviour
 	{
 		Debug.Log("Start");
 		solveTable = new SudokuObject();
-		solveTable.RandomSelf(32);
-		InitializeTable(solveTable);
+		solveTable.RandomSelf(64);
+		Debug.Log(solveTable);
+
+		SudokuCreater sudokuCreater = new SudokuCreater(solveTable, 20);
+		notSolveTable = sudokuCreater.Create();
+		InitializeTable(notSolveTable);
 	}
 
 	public void InitializeTable(SudokuObject sudObj)
@@ -31,18 +35,26 @@ public class UGameManager : MonoBehaviour
 				cellTable[i, j].SetPosition(i, j);
 				cellTable[i, j].SetValue(sudObj.value[i, j]);
 				cellTable[i, j].SetImage(numbersSprite[sudObj.value[i, j]]);
+				cellTable[i, j].image.color = cellTable[i, j].number == 0 ? Color.white : Color.black;
 			}
 		}
 	}
 
 	public void ChangeCurrentCell(Cell c)
 	{
-		if(currentCell != null) currentCell.image.color = Color.black;
+		if(currentCell != null) currentCell.image.color = currentCell.number == 0 ? Color.white : Color.black;
 		ViewAlsoCell(Color.black);
 		
 		currentCell = c;
 		currentCell.image.color = Color.yellow;
 		ViewAlsoCell(Color.cyan);
+	}
+	public void SetCurrentCell(int num)
+	{
+		if (currentCell == null) return;
+		currentCell.SetValue(num);
+		currentCell.SetImage(numbersSprite[num]);
+		notSolveTable.value[currentCell.position.x, currentCell.position.y] = num;
 	}
 	public void ViewAlsoCell(Color clr)
 	{

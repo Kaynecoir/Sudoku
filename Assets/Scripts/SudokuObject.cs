@@ -24,6 +24,10 @@ public class SudokuObject
 	{
 		value = array;
 	}
+	public SudokuObject(SudokuObject sudObj)
+	{
+		value = sudObj.value;
+	}
 	public void SetValue(int x, int y, int val)
 	{
 		value[x, y] = val;
@@ -109,6 +113,18 @@ public class SudokuObject
 			}
 			Debug.Log(this.ToString());
 		}
+	}
+	public static SudokuObject operator *(SudokuObject a, SudokuObject b)
+	{
+		SudokuObject t = new SudokuObject();
+		for(int i = 0; i < 9; i++)
+		{
+			for(int j = 0; j < 9; j++)
+			{
+				t.value[i, j] = a.value[i, j] * b.value[i, j];
+			}
+		}
+		return t;
 	}
 	public static bool operator ==(SudokuObject a, SudokuObject b)
 	{
